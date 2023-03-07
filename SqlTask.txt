@@ -1,0 +1,30 @@
+Сначала создадим основыне таблицы: 
+
+CREATE TABLE Products (
+    ProductID INT PRIMARY KEY,
+    ProductName VARCHAR(50) NOT NULL,
+    Price MONEY NOT NULL
+);
+
+CREATE TABLE Categories (
+    CategoryID INT PRIMARY KEY,
+    CategoryName VARCHAR(50) NOT NULL
+);
+
+и таблицу, которая поможет нам избавится от связи "многие ко многим"
+
+CREATE TABLE ProductCategories (
+    ProductID INT NOT NULL,
+    CategoryID INT NOT NULL,
+    PRIMARY KEY (ProductID, CategoryID),
+    FOREIGN KEY (ProductID) REFERENCES Products (ProductID),
+    FOREIGN KEY (CategoryID) REFERENCES Categories (CategoryID)
+);
+
+Теперь напишем запрос:
+
+SELECT p.ProductName, c.CategoryName
+FROM Products p
+LEFT JOIN ProductCategories pc ON p.ProductID = pc.ProductID
+LEFT JOIN Categories c ON pc.CategoryID = c.CategoryID
+ORDER BY p.ProductName;
